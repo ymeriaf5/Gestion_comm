@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="template1"
+>
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="stylesheet" href="/webjars/bootstrap/5.1.3/css/bootstrap.min.css">
+</head>
+<body>
+    <div layout:fragment="content1">
+        <div class="container mt-2">
+            <div class="card">
+                <div class="card-header">Listes des utilisateurs</div>
+                <div class="card-body">
+                    <form method="get" th:action="@{/}">
+                        <label>Key word</label>
+                        <input type="text" name="keyword" th:value="${keyword}">
+                        <button type="submit" class="btn btn-primary">Chercher</button>
+                    </form>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>ID</th><th>Nom</th><th>Prenom</th><th>Email </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="u:${listUsers}">
+                            <td th:text="${u.id_util}"></td>
+                            <td th:text="${u.nom}"></td>
+                            <td th:text="${u.prenom}"></td>
+                            <td th:text="${u.email}"></td>
+                            <td>
+                                <a onclick="return confirm('Etes vous sure?')" class="btn btn-danger" th:href="@{delete(id=${u.id_util},keyword=${keyword},page=${currentPage})}">
+                                    Delete
+                                </a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <ul class="nav nav-pills">
+                        <li th:each="page,status:${pages}">
+                            <a th:class="${status.index==currentPage?'btn btn-primary ms-1':'btn btn-outline-primary ms-1'}"
+                               th:text="${status.index}"
+                               th:href="@{/(page=${status.index},keyword=${keyword})}"
+                            ></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
